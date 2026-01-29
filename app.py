@@ -1,6 +1,13 @@
-from flask import Flask, render_template, request
+import os
+
+from flask import Flask, render_template, request, flash
+from flask_wtf.csrf import CSRFProtect
+
+from forms import UserForm
 
 app = Flask(__name__)
+app.secret_key = 'clavesita secretita'
+csrf = CSRFProtect()
 
 @app.route('/')
 def index():
@@ -12,9 +19,27 @@ def index():
 def alumnos():
     return render_template('alumnos.html')
 
-@app.route('/usuarios')
+@app.route('/usuarios', methods=["GET", "POST"])
 def usuarios():
-    return render_template('usuarios.html')
+    usuario = {
+        'matricula': None,
+        'nombre': None,
+        'apellido_uno': None,
+        'apellido_dos': None,
+        'correo': None
+    }
+
+    clase = UserForm(request.form)
+    if request.method == 'POST' and clase.validate():
+        usuario['matricula'] = clase.matricula.data
+        usuario['nombre'] = clase.nombre.data
+        usuario['apellido_uno'] = clase.apellido_uno.data
+        usuario['apellido_dos'] = clase.apellido_dos.data
+        usuario['correo'] = clase.correo.data
+        mensaje = 'Bienvenido {}'.format(usuario['nombre'])
+        flash(mensaje)
+
+    return render_template('usuarios.html', form=clase, usuario=usuario)
 
 @app.route('/operasBas', methods=['POST', 'GET'])
 def operasBas():
@@ -76,4 +101,5 @@ def operas():
     '''
 
 if __name__ == '__main__':
+    csrf.init_app(app)
     app.run(debug=True)
