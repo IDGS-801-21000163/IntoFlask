@@ -7,6 +7,20 @@
 
 {%endmacro%}
 
+{% macro datosNuevo(nombre, placeholder, tipo='text') %}
+<div class="mb-3">
+    <label for="{{ nombre }}" class="form-label">{{ nombre }}</label>
+    <input
+        type="{{ tipo }}"
+        class="form-control"
+        id="{{ nombre }}"
+        name="{{ nombre }}"
+        placeholder="{{ placeholder }}"
+        required
+    >
+</div>
+{% endmacro %}
+
 {% macro campoNuevo(field) %}
 
     <td>{{field.label}}</td>

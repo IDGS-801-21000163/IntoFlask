@@ -1,3 +1,4 @@
+import math
 import os
 
 from flask import Flask, render_template, request, flash
@@ -99,6 +100,54 @@ def operas():
             <input type="text" id="name" name="name" required>
         </form>
     '''
+
+@app.route("/distancia", methods=["GET", "POST"])
+def distancia():
+    resultado = None
+
+    if request.method == "POST":
+        x1 = float(request.form["x1"])
+        y1 = float(request.form["y1"])
+        x2 = float(request.form["x2"])
+        y2 = float(request.form["y2"])
+
+        resultado = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+
+    return render_template("distancia/index.html", resultado=resultado)
+
+
+@app.route("/cinepolis", methods=["GET", "POST"])
+def cinepolis():
+    total = None
+    error = None
+
+    if request.method == "POST":
+        try:
+            nombre = request.form["nombre"]
+            compradores = int(request.form["compradores"])
+            boletos = int(request.form["boletos"])
+            tarjeta = request.form.get("tarjeta")
+
+            if boletos > compradores * 7:
+                error = "No se pueden comprar más de 7 boletos por persona"
+            else:
+                subtotal = boletos * 15
+                descuento = 0
+
+                if boletos > 5:
+                    descuento += 0.15
+                elif 3 <= boletos <= 5:
+                    descuento += 0.10
+
+                if tarjeta == "si":
+                    descuento += 0.10
+
+                total = subtotal - (subtotal * descuento)
+
+        except:
+            error = "Datos inválidos"
+
+    return render_template("cinepolis/index.html", total=total, error=error)
 
 if __name__ == '__main__':
     csrf.init_app(app)

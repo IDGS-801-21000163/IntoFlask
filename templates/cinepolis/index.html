@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cinépolis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='cinepolis.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Cinepolis</h1>
+
+    <div style="display: flex;width: 100%;align-items: center;">
+    <form method="post" id="form" style="width: 50%">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <fieldset>
+            <legend>Entradas</legend>
+
+            <label>Nombre</label>
+            <input type="text" name="nombre" required>
+
+            <input type="number" name="compradores" value="1" hidden="hidden" required>
+
+            <label>Tarjeta Cinéco</label>
+            <input type="radio" name="tarjeta" value="si"> Sí
+            <input type="radio" name="tarjeta" value="no" checked> No
+
+            <label>Cantidad de Boletos</label>
+            <input type="number" name="boletos" required>
+        </fieldset>
+
+
+    </form>
+    <form style="width: 50%;">
+         <fieldset>
+            <legend>Salidas</legend>
+
+            <label>Valor a Pagar</label>
+            <input type="text" value="{{ total if total else '' }}" readonly>
+        </fieldset>
+    </form>
+    </div>
+
+
+</div>
+
+<div style="text-align: center;">
+            <label>Acciones</label>
+            <button onclick="document.getElementById('form').submit();">Procesar</button>
+            <button type="reset">Salir</button>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+</div>
+
+</body>
+</html>

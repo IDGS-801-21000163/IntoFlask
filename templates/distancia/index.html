@@ -1,0 +1,40 @@
+{% import "macros.html" as macro %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Distancia entre dos puntos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='distancia.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h2>Calcular distancia entre dos puntos</h2>
+
+    <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <fieldset>
+            <legend>Punto 1</legend>
+            {{ macro.datosNuevo("x1", "x1", "number") }}
+            {{ macro.datosNuevo("y1", "y1", "number") }}
+        </fieldset>
+
+        <fieldset>
+            <legend>Punto 2</legend>
+            {{ macro.datosNuevo("x2", "x2", "number") }}
+            {{ macro.datosNuevo("y2", "y2", "number") }}
+        </fieldset>
+
+        <button type="submit">Calcular</button>
+    </form>
+
+    {% if resultado is not none %}
+        <h3>Resultado:</h3>
+        <p>Distancia = {{ resultado }}</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
